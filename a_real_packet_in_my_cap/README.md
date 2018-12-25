@@ -31,3 +31,17 @@ parties.
 
 So we have a key for a file, but we don't know which file the key unlocks! The
 next step naturally is to find the file of interest. Going back into the
+Protocol Hierarchy, we see a bunch of UDP, ARP, SSH, SSL, ICMP, and HTTP
+traffic. Of these, the only one worth investigating for a file is HTTP.
+Another simple HTTP filter in Wireshark shows a file is being downloaded called
+`deaddrop`. Navigating to `File` -> `Export Objects` -> `HTTP` is the easiest
+way to extract this file from the pcap.
+
+`deaddrop` is an ELF 64-bit binary. Opening it up in Binary Ninja and
+looking at the `main` function reveals that it can follow two basic execution
+paths: `do_pickup` or `do_drop`. I felt that, since I already had the key, I 
+just needed to do some basic RE to figure out which path to take, and pass my
+key in correctly. `do_drop` calls `AES_CBC_encrypt_buffer`, while `do_pickup`
+calls `AES_CBC_decrypt_buffer`. Therefore, `do_pickup` is probably the route
+we want to take. By running `./deaddrop pickup <key>`, where `<key>` is the
+key in the screenshot above, we get the flag.
