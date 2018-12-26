@@ -45,5 +45,5 @@ function.
 
 My solve script can be found at [ooo_solve.py](ooo_solve.py). I manually
 extracted the integer values from functions into a list, and then iterate over
-that list in reverse order, iteratively XORing the base64-decoded flag with the
-integer value. This produces the flag!
+that list in reverse order, repeatedly XORing each byte of the intermediate results
+with the next integer value. This produces the flag!
