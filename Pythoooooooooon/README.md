@@ -29,18 +29,19 @@ length order, which is the opposite order that the functions are organized
 above the main `ooooooo` function.
 
 Next, I need to figure out what each function is doing. If we look at `ooo`, an 
-XOR operator suggests that the nested function calls XOR each byte of the flag 
-with a one-byte key. Since we are trying to decode the encoded flag, we should 
-just need to XOR the encoded bytes again with the correct key bytes in reverse 
-order to get the original decoded flag. If we then look at the other functions, 
-most of them have the same body, but a different integer multiplier applied to 
-the `'o'` character to produce a sequence of `'o'` in varying length. Finally, 
-if we look at the `oooooooo` function, which is called in every function that 
-contains the integer multiplier, it simply returns the length of the parameter, 
-which is the sequence of `'o'`s. Without knowing exactly how the code works, I 
-have enough information to guess that the encoded flag can be decoded by 
-iteratively XORing the flag with the single-byte XOR keys, which can be 
-extracted from the functions defined above the `ooo` function.
+XOR operator and the use of list comprehension suggests that the nested function
+calls XOR each byte of the flag with a one-byte key. Since we are trying to
+decode the encoded flag, we should just need to XOR the encoded bytes again with
+the correct key bytes in reverse order to get the original decoded flag. If we
+then look at the other functions, most of them have the same body, but a
+different integer multiplier applied to the `'o'` character to produce a sequence
+of `'o'` in varying length. Finally, if we look at the `oooooooo` function, which
+is called in every function that contains the integer multiplier, it simply
+returns the length of the parameter, which is the sequence of `'o'`s. Without
+knowing exactly how the code works, I have enough information to guess that the
+encoded flag can be decoded by iteratively XORing the flag with the single-byte
+XOR keys, which can be extracted from the functions defined above the `ooo`
+function.
 
 My solve script can be found at [ooo_solve.py](ooo_solve.py). I manually
 extracted the integer values from functions into a list, and then iterate over
