@@ -74,5 +74,18 @@ Next step is figuring out which instructions available to us in `libc.so`,
 `fighter.so`, and `ropen_to_suggestions` will allow us to execute our shellcode
 to get a remote shell. 
 
-TODO: Pull down final solve.py from desktop to get ROP chain and finish 
-writeup.
+We can use pwntools to make this easy. In [the solve script](solve_ropen.py),
+on lines 37-41, I do some work w/ leaking the offset of a libc function. This
+isn't necessary since ASLR is turned off, but I wanted to do the work so that I
+have the code already written for the other Cyberstakes pwn challenges. The actual
+work to build a ROP chain is on lines 70-72. We call the pwntool's `ROP`
+function on libc to automatically analyze the binary and prepare to build a ROP 
+chain. Then we call the `search` function to find the address where the string
+`/bin/sh` is located in the libc file. This is then passed as an argument
+to the `system` function, which automatically locates and calls the function
+within libc. Pwntools makes it very easy to build a simple `system('bin/sh')`
+ROP chain by defining these functions.
+
+The rest of the script should be pretty self-explanatory. When you run it
+against the remote service, you gain control of the execution and spawn a
+shell. If you run `cat flag.txt`, you will get the flag!
